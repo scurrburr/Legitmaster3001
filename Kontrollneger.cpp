@@ -16,39 +16,47 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 
 	this->dwClientBaseAddr = dwClientBaseAddr;
 	this->dwEngineBaseAddr = dwEngineBaseAddr;
-	printf("Client addr assigned: 0x%X\n", dwClientBaseAddr);
-	printf("Engine addr assigned: 0x%X\n", dwEngineBaseAddr);
+	printf("Client addr assigned:\t0x%X\n", dwClientBaseAddr);
+	printf("Engine addr assigned:\t0x%X\n", dwEngineBaseAddr);
 	Sleep(500);
 
 	this->dwClientStateAddr = *(DWORD*)(this->dwEngineBaseAddr + hazedumper::signatures::dwClientState);
-	printf("Client state addr assigned: 0x%X\n", this->dwClientStateAddr);
+	printf("State addr assigned:\t0x%X\n", this->dwClientStateAddr);
 
 	this->iCurrentGameState = readMemory<int>(this->dwClientStateAddr + hazedumper::signatures::dwClientState_State);
-	std::cout << "Current game state: " << iCurrentGameState << std::endl;
+	printf("Game state detected: %d\n", iCurrentGameState);
 
-	while(iCurrentGameState != 6)
+	if (iCurrentGameState != 6)
 	{
-		std::cout << "\rWaiting to join a game...";
-		Sleep(500);
-		this->iCurrentGameState = readMemory<int>(this->dwClientStateAddr + hazedumper::signatures::dwClientState_State);
-	} std::cout << " OK!\n";
-
-	printf("Local player Nr: %d\n", *(DWORD*)(this->dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer));
-	printf("Local Player addr: 0x%X\n", *(DWORD*)(this->dwClientBaseAddr + hazedumper::signatures::dwEntityList - 0x10));
-	printf("Local Player health: %d\n", *(int*)(*(DWORD*)(this->dwClientBaseAddr + hazedumper::signatures::dwLocalPlayer) + hazedumper::netvars::m_iHealth));
+		while(iCurrentGameState != 6)
+			{
+				print("\rWaiting to join a game...");
+				Sleep(500);
+				this->iCurrentGameState = readMemory<int>(this->dwClientStateAddr + hazedumper::signatures::dwClientState_State);
+			}
+		std::cout << " OK!\n";
+	}
+	else
+	{
+		print("Already ingame, no need to wait.");
+	}
+	
+	*(int*)(*(DWORD*)(this->dwClientBaseAddr + hazedumper::signatures::dwLocalPlayer) + hazedumper::netvars::m_iHealth));
 
 	std::cout << "Trying to initialize localPlayer." << std::endl;
 	this->localPlayer = CLocalPlayer(this->dwClientBaseAddr, this->dwClientStateAddr);
 
+	// TODO: Check if localPlayer is able to be dormant.
 	//while(this->localPlayer.isDormant())
 	//{
 	//	std::cout << "\rWaiting for local player to not be dormant...";
 	//	Sleep(500);
 	//} std::cout << " OK!\n";
 
+	// TODO: Fix glowObject shit
 	// Init Glow object with addr
-	// this->glow = Glow(this->dwClientBaseAddr + hazedumper::signatures::dwGlowObjectManager);
-	// Sleep(500);
+	this->glow = Glow(this->dwClientBaseAddr + hazedumper::signatures::dwGlowObjectManager);
+	Sleep(500);
 	//
 	// this->updatePlayers();
 	// std::cout << "Players initially updated." << std::endl;
@@ -57,24 +65,24 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 void Kontrollneger::updatePlayers()
 {
 	localPlayer.updateLocal();
-	// entityList.clear();
-	// teamIds.clear();
-	// enemyIds.clear();
-	//
-	// for (int i = 1; i < 64; ++i)
-	// {
-	// 	CPlayer temp(this->dwClientBaseAddr, i);
-	// 	if (temp.isDormant() || !temp.isAlive()) continue;
-	//
-	// 	if (temp.getTeam() == localPlayer.getTeam())
-	// 		teamIds.push_back(i);
-	// 	else
-	// 		enemyIds.push_back(i);
-	//
-	// 	entityList.insert(std::pair<int, CPlayer>(i, temp));
-	// }
-	//
-	// std::cout << "Entities detected: " << entityList.size() << std::endl;
+	entityList.clear();
+	teamIds.clear();
+	enemyIds.clear();
+	
+	for (int i = 1; i < 64; ++i)
+	{
+		CPlayer temp(this->dwClientBaseAddr, i);
+		if (temp.isDormant() || !temp.isAlive()) continue;
+	
+		if (temp.getTeam() == localPlayer.getTeam())
+			teamIds.push_back(i);
+		else
+			enemyIds.push_back(i);
+	
+		entityList.insert(std::pair<int, CPlayer>(i, temp));
+	}
+	
+	std::cout << "Entities detected: " << entityList.size() << std::endl;
 }
 
 bool Kontrollneger::isCurrentGameStateValid()

@@ -11,7 +11,7 @@ Glow::Glow()
 Glow::Glow(DWORD glowObjectManagerAddr)
 {
   this->glowObjectManagerAddr = glowObjectManagerAddr;
-	std::cout << "Glow initialized." << std::endl;
+  printf("glowObject successfully initialized! [addr=%X]", glowObjectManagerAddr);
 }
 
 void Glow::setTeamGlow(GlowObjectDefinition_t& glowObject)
@@ -42,7 +42,6 @@ void Glow::setPropGlow(GlowObjectDefinition_t& glowObject)
 GlowObjectDefinition_t* Glow::getGlowObjPtr(int playerIndex, std::map<int, CPlayer> entities)
 {
   int glowIndex = entities.find(playerIndex)->second.getGlowIndex();
-  std::cout << "Glow index: " << glowIndex  << std::endl;
   return &(*(GlowObjectDefinition_t*)(glowObjectManagerAddr + (glowIndex * 0x38)));
 }
 
@@ -53,4 +52,6 @@ void Glow::update(std::map<int, CPlayer> entities, std::vector<int> teamIds, std
 
   for (int id : teamIds)
     setEnemyGlow(*getGlowObjPtr(id, entities));
+
+  printf("%d enemies and %d teammates are glowing.", enemyIds.size(), teamIds.size());
 }

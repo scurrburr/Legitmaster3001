@@ -8,27 +8,13 @@ CLocalPlayer::CLocalPlayer()
 	std::cout << "CLocalPlayer waiting for initialization." << std::endl;
 }
 
-CLocalPlayer::CLocalPlayer(DWORD dwClientBaseAddr, DWORD dwClientStateAddr) : CPlayer()
+CLocalPlayer::CLocalPlayer(DWORD dwClientBaseAddr, DWORD dwClientStateAddr)
+	: CPlayer(dwClientBaseAddr, 0)
 {
-	this->iId = 0;
+	// (int)*(DWORD*)(this->dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer))
+	// What is returned from the dwClientState_GetLocalPlayer offset?
 	this->dwClientStateAddr = dwClientStateAddr;
-
-	std::cout << "Getting Player addr. ";
-	this->dwPlayerAddr = this->dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer;
-
-	printf("ClientState: 0x%X; fFlags: %d", this->dwClientStateAddr, *(int*)(dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer + hazedumper::netvars::m_fFlags));
-	std::cout << "[" << this->dwPlayerAddr << "]" << std::endl;
-
-	std::cout << "Checking if dormant. " << *(bool*)(this->dwPlayerAddr + hazedumper::signatures::m_bDormant) << std::endl;
-	if (this->isDormant()) return;
-
-	std::cout << "Updating local information." << std::endl;
 	this->updateLocal();
-
-	std::cout << "Updating general information." << std::endl;
-	this->update();
-
-	Sleep(1000);
 }
 
 bool CLocalPlayer::updateLocal()
@@ -68,7 +54,7 @@ vector2f CLocalPlayer::getViewPunchAngle()
 
 void CLocalPlayer::setViewAngles(vector2f angles)
 {
-	 *(vector2f*)(dwClientStateAddr + hazedumper::signatures::dwClientState_ViewAngles) = angles;
+	*(vector2f*)(dwClientStateAddr + hazedumper::signatures::dwClientState_ViewAngles) = angles;
 }
 
 vector2f CLocalPlayer::getViewAngles()

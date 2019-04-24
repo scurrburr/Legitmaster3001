@@ -10,16 +10,17 @@ CPlayer::CPlayer()
 
 CPlayer::CPlayer(DWORD dwClientBaseAddr, int iId)
 {
-	this->dwPlayerAddr = *(DWORD*)(dwClientBaseAddr + hazedumper::signatures::dwEntityList + iId * 0x10);
+	// iId = 0 is localPlazer address.
+	this->dwPlayerAddr = *(DWORD*)(dwClientBaseAddr + hazedumper::signatures::dwEntityList + (iId - 1) * 0x10);
 	this->iId = iId;
 
 	if (!this->update())
 	{
-		std::cout << "CPlayer [" << iId << "] Not able to update. addr[" << this->dwPlayerAddr << "]" << std::endl;
+		printf("CPlayer [id=%d] is not able to update! [addr=%X]", iId, this->dwPlayerAddr);
 		return;
 	}
 
-	std::cout << "CPlayer [" << iId << "] initialized. addr[" << this->dwPlayerAddr << "]" << std::endl;
+	printf("CPlayer [id=%d] successfully initialized! [addr=%X]", iId, this->dwPlayerAddr);}
 }
 
 bool CPlayer::update()
