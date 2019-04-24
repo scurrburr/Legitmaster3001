@@ -20,7 +20,7 @@ CPlayer::CPlayer(DWORD dwClientBaseAddr, int iId)
 		return;
 	}
 
-	printf("CPlayer [id=%d] successfully initialized! [addr=%X]", iId, this->dwPlayerAddr);}
+	printf("CPlayer [id=%d] successfully initialized! [addr=%X]", iId, this->dwPlayerAddr);
 }
 
 bool CPlayer::update()

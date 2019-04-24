@@ -18,7 +18,6 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 	this->dwEngineBaseAddr = dwEngineBaseAddr;
 	printf("Client addr assigned:\t0x%X\n", dwClientBaseAddr);
 	printf("Engine addr assigned:\t0x%X\n", dwEngineBaseAddr);
-	Sleep(500);
 
 	this->dwClientStateAddr = *(DWORD*)(this->dwEngineBaseAddr + hazedumper::signatures::dwClientState);
 	printf("State addr assigned:\t0x%X\n", this->dwClientStateAddr);
@@ -30,7 +29,7 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 	{
 		while(iCurrentGameState != 6)
 			{
-				print("\rWaiting to join a game...");
+				std::cout << "\rWaiting to join a game...";
 				Sleep(500);
 				this->iCurrentGameState = readMemory<int>(this->dwClientStateAddr + hazedumper::signatures::dwClientState_State);
 			}
@@ -38,10 +37,8 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 	}
 	else
 	{
-		print("Already ingame, no need to wait.");
+		std::cout << "Already ingame, no need to wait.\n";
 	}
-	
-	*(int*)(*(DWORD*)(this->dwClientBaseAddr + hazedumper::signatures::dwLocalPlayer) + hazedumper::netvars::m_iHealth));
 
 	std::cout << "Trying to initialize localPlayer." << std::endl;
 	this->localPlayer = CLocalPlayer(this->dwClientBaseAddr, this->dwClientStateAddr);
@@ -55,7 +52,7 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 
 	// TODO: Fix glowObject shit
 	// Init Glow object with addr
-	this->glow = Glow(this->dwClientBaseAddr + hazedumper::signatures::dwGlowObjectManager);
+	// this->glow = Glow(this->dwClientBaseAddr + hazedumper::signatures::dwGlowObjectManager);
 	Sleep(500);
 	//
 	// this->updatePlayers();

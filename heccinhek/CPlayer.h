@@ -2,6 +2,8 @@
 
 #include "../math/Vectors.h"
 #include "../haze/csgo.h"
+#include "../fmt/core.h"
+#include "../fmt/format.h"
 
 class CPlayer
 {
