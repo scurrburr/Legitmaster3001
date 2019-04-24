@@ -13,15 +13,13 @@ CPlayer::CPlayer(DWORD dwClientBaseAddr, int iId)
 	this->dwPlayerAddr = *(DWORD*)(dwClientBaseAddr + hazedumper::signatures::dwEntityList + iId * 0x10);
 	this->iId = iId;
 
-	if (this->isDormant()) 
+	if (!this->update())
 	{
-		std::cout << "Constructed Player Nr.: " << iId << " is dormant.";
+		std::cout << "CPlayer [" << iId << "] Not able to update. addr[" << this->dwPlayerAddr << "]" << std::endl;
 		return;
 	}
 
-	this->update();
-
-	std::cout << "CPlayer initialized." << std::endl;
+	std::cout << "CPlayer [" << iId << "] initialized. addr[" << this->dwPlayerAddr << "]" << std::endl;
 }
 
 bool CPlayer::update()
@@ -56,8 +54,9 @@ void CPlayer::setSpotted(bool bSpotted)
 
 bool CPlayer::isDormant()
 {
-	std::cout << this->iId << " Player addr: " << this->dwPlayerAddr << "; " << *(bool*)(this->dwPlayerAddr + hazedumper::signatures::m_bDormant) << std::endl;
-	return *(bool*)(this->dwPlayerAddr + hazedumper::signatures::m_bDormant);
+	bool temp = *(bool*)(this->dwPlayerAddr + hazedumper::signatures::m_bDormant);
+	std::cout << "Dormant check: " << temp << std::endl;
+	return temp;
 }
 
 int CPlayer::getTeam()

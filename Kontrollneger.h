@@ -6,6 +6,7 @@
 #include "heccinhek/Aimbot.h"
 #include <map>
 #include <vector>
+#include <iostream>
 
 class Kontrollneger
 {
@@ -26,6 +27,7 @@ class Kontrollneger
 
 	public:
 		Kontrollneger(DWORD clientbase, DWORD enginebase);
+
 		void updatePlayers();
 		bool update();
 		bool isCurrentGameStateValid();
