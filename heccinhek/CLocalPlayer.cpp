@@ -11,7 +11,6 @@ CLocalPlayer::CLocalPlayer()
 CLocalPlayer::CLocalPlayer(DWORD dwClientBaseAddr, DWORD dwClientStateAddr)
 	: CPlayer(dwClientBaseAddr, 0)
 {
-	// (int)*(DWORD*)(this->dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer))
 	// What is returned from the dwClientState_GetLocalPlayer offset?
 	this->dwClientStateAddr = dwClientStateAddr;
 	this->updateLocal();
@@ -27,7 +26,6 @@ bool CLocalPlayer::updateLocal()
 	aimPunchAngle = *(vector2f*)(dwPlayerAddr + hazedumper::netvars::m_aimPunchAngle);
 	viewAngles = *(vector2f*)(dwClientStateAddr + hazedumper::signatures::dwClientState_ViewAngles);
 	vecVelocity = *(vector3f*)(dwPlayerAddr + hazedumper::netvars::m_vecVelocity);
-	std::cout << vecVelocity.GetLength() << std::endl;
 	flFlashMaxAlpha = *(float*)(dwPlayerAddr + hazedumper::netvars::m_flFlashMaxAlpha);
 	return true;
 }

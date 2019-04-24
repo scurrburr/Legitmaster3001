@@ -48,12 +48,6 @@
     <ClInclude Include="heccinhek\Glow.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="fmt\core.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="fmt\format.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="niggainternal_fix_1_0.cpp">

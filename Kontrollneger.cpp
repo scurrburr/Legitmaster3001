@@ -40,8 +40,10 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 		std::cout << "Already ingame, no need to wait.\n";
 	}
 
+	std::cout << readMemory<uint32_t>(this->dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer) << std::endl;
+
 	std::cout << "Trying to initialize localPlayer." << std::endl;
-	this->localPlayer = CLocalPlayer(this->dwClientBaseAddr, this->dwClientStateAddr);
+	// this->localPlayer = CLocalPlayer(this->dwClientBaseAddr, this->dwClientStateAddr);
 
 	// TODO: Check if localPlayer is able to be dormant.
 	//while(this->localPlayer.isDormant())
@@ -61,25 +63,25 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 
 void Kontrollneger::updatePlayers()
 {
-	localPlayer.updateLocal();
-	entityList.clear();
-	teamIds.clear();
-	enemyIds.clear();
+	// localPlayer.updateLocal();
+	// entityList.clear();
+	// teamIds.clear();
+	// enemyIds.clear();
 	
-	for (int i = 1; i < 64; ++i)
-	{
-		CPlayer temp(this->dwClientBaseAddr, i);
-		if (temp.isDormant() || !temp.isAlive()) continue;
+	// for (int i = 1; i < 63; ++i)
+	// {
+	// 	CPlayer temp(this->dwClientBaseAddr, i);
+	// 	if (temp.isDormant() || !temp.isAlive()) continue;
 	
-		if (temp.getTeam() == localPlayer.getTeam())
-			teamIds.push_back(i);
-		else
-			enemyIds.push_back(i);
+	// 	if (temp.getTeam() == localPlayer.getTeam())
+	// 		teamIds.push_back(i);
+	// 	else
+	// 		enemyIds.push_back(i);
 	
-		entityList.insert(std::pair<int, CPlayer>(i, temp));
-	}
+	// 	entityList.insert(std::pair<int, CPlayer>(i, temp));
+	// }
 	
-	std::cout << "Entities detected: " << entityList.size() << std::endl;
+	// std::cout << "Entities detected: " << entityList.size() << std::endl;
 }
 
 bool Kontrollneger::isCurrentGameStateValid()
@@ -108,8 +110,11 @@ bool Kontrollneger::update()
 		return false;;
 	}
 
+	// localPlayer.updateLocal();
+	// localPlayer.update();
+
 	// input();
-	updatePlayers();
+	// updatePlayers();
 	// glow.update(entityList, teamIds, enemyIds);
 
 	return true;

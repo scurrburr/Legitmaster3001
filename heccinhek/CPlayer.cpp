@@ -16,11 +16,11 @@ CPlayer::CPlayer(DWORD dwClientBaseAddr, int iId)
 
 	if (!this->update())
 	{
-		printf("CPlayer [id=%d] is not able to update! [addr=%X]", iId, this->dwPlayerAddr);
+		printf("CPlayer [id=%d] is not able to update! [addr=%X]\n", iId, this->dwPlayerAddr);
 		return;
 	}
 
-	printf("CPlayer [id=%d] successfully initialized! [addr=%X]", iId, this->dwPlayerAddr);
+	printf("CPlayer [id=%d] successfully initialized! [addr=%X]\n", iId, this->dwPlayerAddr);
 }
 
 bool CPlayer::update()
@@ -37,6 +37,9 @@ bool CPlayer::update()
 	szLastPlaceName = *(char*)(dwPlayerAddr + hazedumper::netvars::m_szLastPlaceName);
 	bSpotted = *(bool*)(dwPlayerAddr + hazedumper::netvars::m_bSpotted);
 	bImmune = *(bool*)(dwPlayerAddr + hazedumper::netvars::m_bGunGameImmunity);
+
+	printf("Health of Player %d: %d\n", iId, iHealth);
+
 	return true;
 }
 
@@ -55,9 +58,7 @@ void CPlayer::setSpotted(bool bSpotted)
 
 bool CPlayer::isDormant()
 {
-	bool temp = *(bool*)(this->dwPlayerAddr + hazedumper::signatures::m_bDormant);
-	std::cout << "Dormant check: " << temp << std::endl;
-	return temp;
+	return *(bool*)(this->dwPlayerAddr + hazedumper::signatures::m_bDormant);
 }
 
 int CPlayer::getTeam()

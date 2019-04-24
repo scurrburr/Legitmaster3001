@@ -166,8 +166,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="fmt\core.h" />
-    <ClInclude Include="fmt\format.h" />
     <ClInclude Include="heccinhek/CLocalPlayer.h" />
     <ClInclude Include="heccinhek/CPlayer.h" />
     <ClInclude Include="haze/csgo.h" />
