@@ -40,9 +40,17 @@ Kontrollneger::Kontrollneger(DWORD dwClientBaseAddr, DWORD dwEngineBaseAddr)
 		std::cout << "Already ingame, no need to wait.\n";
 	}
 
-	std::cout << readMemory<uint32_t>(this->dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer) << std::endl;
+	// Print every addr in Entitiy list.
+	std::cout << "Printing every entitiy addr in the entity list up to 64:"
+	for (int i = 0; i < 64; ++i)
+	{
+		DWORD addr = *(DWORD*)(dwClientBaseAddr + hazedumper::signatures::dwEntityList + (iId - 1) * 0x10);
+		printf(" - [%02d] 0x%X", i, addr);
+	} std::cout << "Done!";
 
-	std::cout << "Trying to initialize localPlayer." << std::endl;
+	// std::cout << readMemory<uint32_t>(this->dwClientStateAddr + hazedumper::signatures::dwClientState_GetLocalPlayer) << std::endl;
+
+	// std::cout << "Trying to initialize localPlayer." << std::endl;
 	// this->localPlayer = CLocalPlayer(this->dwClientBaseAddr, this->dwClientStateAddr);
 
 	// TODO: Check if localPlayer is able to be dormant.
